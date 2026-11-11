@@ -57,3 +57,66 @@ JOIN organization ON organization.name = project.organization_name;
 SELECT service_project_id, project_date, project_title, organization_id
 FROM service_project
 ORDER BY project_date, service_project_id;
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+INSERT INTO category (name)
+VALUES
+    ('Environmental'),
+    ('Educational'),
+    ('Community Service'),
+    ('Health and Wellness');
+
+CREATE TABLE project_category (
+    service_project_id INTEGER NOT NULL
+        REFERENCES service_project (service_project_id) ON DELETE CASCADE,
+    category_id INTEGER NOT NULL
+        REFERENCES category (category_id) ON DELETE CASCADE,
+    PRIMARY KEY (service_project_id, category_id)
+);
+
+INSERT INTO project_category (service_project_id, category_id)
+SELECT service_project.service_project_id, category.category_id
+FROM (
+    VALUES
+        ('Park Trail Restoration', 'Environmental'),
+        ('Park Trail Restoration', 'Community Service'),
+        ('Community Playground Repairs', 'Community Service'),
+        ('Community Playground Repairs', 'Health and Wellness'),
+        ('Neighborhood Accessibility Improvements', 'Community Service'),
+        ('Neighborhood Accessibility Improvements', 'Health and Wellness'),
+        ('Community Garden Path Construction', 'Environmental'),
+        ('Community Garden Path Construction', 'Community Service'),
+        ('Riverwalk Clean-Up and Repair', 'Environmental'),
+        ('Riverwalk Clean-Up and Repair', 'Community Service'),
+        ('Community Seedling Giveaway', 'Environmental'),
+        ('School Garden Planting Day', 'Environmental'),
+        ('School Garden Planting Day', 'Educational'),
+        ('Neighborhood Compost Workshop', 'Environmental'),
+        ('Neighborhood Compost Workshop', 'Educational'),
+        ('Urban Orchard Care Day', 'Environmental'),
+        ('Community Harvest Festival', 'Community Service'),
+        ('Community Harvest Festival', 'Health and Wellness'),
+        ('Food Bank Volunteer Day', 'Community Service'),
+        ('Food Bank Volunteer Day', 'Health and Wellness'),
+        ('Senior Center Technology Help', 'Educational'),
+        ('Senior Center Technology Help', 'Community Service'),
+        ('Community Clothing Drive', 'Community Service'),
+        ('Youth Mentoring Kickoff', 'Educational'),
+        ('Youth Mentoring Kickoff', 'Community Service'),
+        ('Neighborhood Resource Fair', 'Community Service'),
+        ('Neighborhood Resource Fair', 'Health and Wellness')
+) AS assignment (project_title, category_name)
+JOIN service_project
+  ON service_project.project_title = assignment.project_title
+JOIN category
+  ON category.name = assignment.category_name;
+
+SELECT service_project.project_title, category.name AS category_name
+FROM project_category
+JOIN service_project USING (service_project_id)
+JOIN category USING (category_id)
+ORDER BY service_project.project_title, category.name;
