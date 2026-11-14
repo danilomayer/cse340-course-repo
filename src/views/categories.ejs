@@ -1,12 +1,14 @@
 <%- include('partials/header') %>
     <main>
-        <h1>
-            <%= title %>
-        </h1>
-        <ul>
-            <% categories.forEach(category => { %>
-                <li><%= category.name %></li>
+        <p class="eyebrow">Explore service opportunities</p>
+        <h1><%= title %></h1>
+        <section class="category-grid" aria-label="Project categories">
+            <% categories.forEach((category, index) => { %>
+                <article class="category-card" data-number="<%= String(index + 1).padStart(2, '0') %>">
+                    <h3><%= category.name %></h3>
+                    <p><%= category.description %></p>
+                </article>
             <% }) %>
-        </ul>
+        </section>
     </main>
     <%- include('partials/footer') %>

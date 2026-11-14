@@ -1,16 +1,17 @@
 <%- include('partials/header') %>
     <main>
-        <h1>
-            <%= title %>
-        </h1>
-        <p>Here are a few of our partner organizations:</p>
-        <ul>
+        <p class="eyebrow">Working together</p>
+        <h1><%= title %></h1>
+        <p class="intro">Meet the local organizations making these service opportunities possible.</p>
+        <section class="cards" aria-label="Partner organizations">
             <% organizations.forEach(organization=> { %>
-                <li><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"><strong>
-                        <%= organization.name %>
-                    </strong>: <%= organization.contact_email %>
-                </li>
+                <article class="card">
+                    <img src="/images/<%= organization.logo %>" alt="<%= organization.name %> logo">
+                    <h3><%= organization.name %></h3>
+                    <p><%= organization.description %></p>
+                    <p><a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
+                </article>
                 <% }); %>
-        </ul>
+        </section>
     </main>
     <%- include('partials/footer') %>

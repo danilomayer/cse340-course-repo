@@ -59,14 +59,11 @@ app.get('/categories', async (req, res) => {
     res.render('categories', { title, categories });
 });
 
-app.listen(PORT, async () => {
-    try {
-        await testConnection();
-        const projects = await getAllProjects();
-        console.log('Service projects:', projects);
-        console.log(`Server is running at http://127.0.0.1:${PORT}`);
-        console.log(`Environment: ${NODE_ENV}`);
-    } catch (error) {
-        console.error('Error connecting to the database:', error);
-    }
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is listening on port ${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
+
+    testConnection().catch(error => {
+        console.error('Startup database connectivity check failed:', error);
+    });
 });
